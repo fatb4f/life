@@ -1,0 +1,15 @@
+name: Label workout logs
+on:
+  issues:
+    types: [opened, edited]
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: contains(github.event.issue.title, 'Gym') || contains(github.event.issue.title, 'Yoga') || contains(github.event.issue.title, 'Workout')
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: workout

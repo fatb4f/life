@@ -1,0 +1,50 @@
+name: Weekly Plan
+description: Parent issue to plan the week and link sessions
+labels: [weekly-plan, phase-1→2]
+body:
+  - type: input
+    id: week
+    attributes: { label: Week (YYYY-MM-DD), placeholder: "2025-11-10" }
+    validations: { required: true }
+  - type: textarea
+    id: goals
+    attributes: { label: Goals, placeholder: "e.g., scapular control, pelvis neutrality" }
+  - type: input
+    id: hrv_rule
+    attributes: { label: HRV rule, placeholder: "Progress if ≥ baseline; maintain/deload if ↓ >10%" }
+  - type: textarea
+    id: plan
+    attributes:
+      label: Plan
+      description: Days for Workout A/B and optional sessions
+      placeholder: |
+        - Workout A: <focus>  • Days: <Mon/Thu>
+        - Workout B: <focus>  • Days: <Tue/Fri>
+        - Optional: Bikram / Desk-Side routine
+  - type: textarea
+    id: progression
+    attributes:
+      label: Progression knob (pick ONE)
+      placeholder: |
+        - [ ] TUT ↑ (e.g., 4-2-4 tempo)
+        - [ ] Reps ↑ (+1 per set)
+        - [ ] Sets ↑ (+1 total)
+        - [ ] Density ↑ (rest −10–15s)
+        - [ ] Maintain / Deload
+  - type: textarea
+    id: subissues
+    attributes:
+      label: Sub-issues (sessions)
+      description: Paste links after creating workout sub-issues
+      placeholder: |
+        - [ ] #<A-issue-number>
+        - [ ] #<B-issue-number>
+  - type: textarea
+    id: review
+    attributes:
+      label: End-of-Week Review
+      placeholder: |
+        **What improved:**  
+        **What felt off:**  
+        **HRV trend:** ↑ / ↔ / ↓ (why)  
+        **Next week: progress / hold / deload:**

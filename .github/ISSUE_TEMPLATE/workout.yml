@@ -1,0 +1,39 @@
+name: Workout Log
+description: Quick log for a training session
+labels: [workout, phase-1→2]
+body:
+  - type: input
+    id: date
+    attributes: { label: Date (YYYY-MM-DD) }
+    validations: { required: true }
+  - type: input
+    id: title
+    attributes: { label: Session title, placeholder: "Gym – Upper Push/Scapular (Workout A)" }
+  - type: dropdown
+    id: focus
+    attributes:
+      label: Focus
+      options: [Upper Push/Scapular, Lower/Core Integration, Pull/Rotation, Mobility/Breath]
+      default: 0
+  - type: input
+    id: duration
+    attributes: { label: Duration (min) }
+  - type: input
+    id: hrv
+    attributes: { label: HRV (pre | lowest | post | next-AM) }
+  - type: textarea
+    id: exercises
+    attributes:
+      label: Exercises (table ok)
+      placeholder: |
+        | Movement | Sets×Reps | Tempo | RPE | Notes |
+        |---|---|---|---|---|
+  - type: textarea
+    id: regulation
+    attributes: { label: Cooldown / Regulation (breath, mobility) }
+  - type: textarea
+    id: flags
+    attributes: { label: Flags (pain, asymmetry) }
+  - type: textarea
+    id: notes
+    attributes: { label: Notes / Links (HRV screenshots, docs) }
