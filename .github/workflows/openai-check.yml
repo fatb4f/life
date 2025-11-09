@@ -2,6 +2,13 @@ name: openai-check
 
 on:
   workflow_dispatch:
+   inputs:
+     model:
+      description: "OpenAI model"
+      default: gpt-4o-mini
+     message:
+       description: "Message to send"
+       default: "Hello from GitHub Actions!"
   push:
     paths:
       - .github/workflows/openai-check.yml
@@ -30,6 +37,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Call OpenAI Chat API via curl
+        timeout-minutes: 2
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: https://api.openai.com/v1
