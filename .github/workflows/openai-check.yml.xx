@@ -8,26 +8,23 @@ on:
 
 permissions:
   contents: read
-  # pull-requests: write  # uncomment only if you add a PR-comment step
+  # pull-requests: write   # uncomment only if you add a PR-comment step
 
 jobs:
   call-openai:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Preflight: check OPENAI_API_KEY is present"
+      - name: Preflight check OPENAI_API_KEY is present
         shell: bash
         run: |
           if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
             echo "Secret OPENAI_API_KEY is missing or not accessible to this job." >&2
-            echo "Check repo/env secret location, event type (fork PRs), exact name." >&2
+            echo "Check: repo vs environment secret, event type (no secrets for fork PRs), exact name." >&2
             exit 1
           fi
-
-      - name: Ensure jq present
-        shell: bash
-        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Call OpenAI Chat API via curl
         env:
@@ -43,4 +40,3 @@ jobs:
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d "$payload" | jq -r '.choices[0].message.content'
-
