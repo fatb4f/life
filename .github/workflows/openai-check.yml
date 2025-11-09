@@ -19,7 +19,7 @@ steps:
 - uses: actions/checkout@v4
 
 
-- name: Preflight: check secret presence
+- name: Preflight check secret presence
 run: |
 if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
 echo "Secret OPENAI_API_KEY is missing or not accessible to this job." >&2
