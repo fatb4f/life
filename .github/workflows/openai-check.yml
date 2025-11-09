@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Preflight: check OPENAI_API_KEY is present
+      - name: Preflight check OPENAI_API_KEY is present
         shell: bash
         run: |
           if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
