@@ -1,0 +1,69 @@
+name: MQT1001 Automation (Monorepo)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'MQT1001/**'
+      - '.github/workflows/mqt1001.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./MQT1001
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize scaffold (idempotent)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p modules/module{1..6} assets/pdf docs .github/ISSUE_TEMPLATE
+          [ -f README.md ] || echo "# MQT1001 – initialized by workflow" > README.md
+
+  label_milestone_sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up GitHub CLI
+        uses: cli/cli@v2
+        with:
+          version: latest
+      - name: Sync namespaced labels and milestones (repo-level)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          gh api repos/$REPO/labels --method GET --paginate > labels.json || echo "[]">labels.json
+          create_or_update_label() {
+            NAME="$1"; COLOR="$2"; DESC="$3"
+            if jq -e --arg n "$NAME" '.[] | select(.name==$n)' labels.json > /dev/null; then
+              gh api repos/$REPO/labels/$NAME --method PATCH -F new_name="$NAME" -F color="$COLOR" -F description="$DESC" || true
+            else
+              gh api repos/$REPO/labels --method POST -F name="$NAME" -F color="$COLOR" -F description="$DESC" || true
+            fi
+          }
+          create_or_update_label "MQT:Module" "1D76DB" "Math module (MQT1001)"
+          create_or_update_label "MQT:TP" "5319E7" "Travail pratique (MQT1001)"
+          create_or_update_label "MQT:Practice" "0E8A16" "Practice session (MQT1001)"
+          create_or_update_label "MQT:Correction" "FBCA04" "Corrections file (MQT1001)"
+          create_or_update_label "MQT:Review" "D4C5F9" "Review checkpoint (MQT1001)"
+
+          gh api repos/$REPO/milestones --method GET --paginate > milestones.json || echo "[]">milestones.json
+          ensure_milestone() {
+            TITLE="$1"; DUE="$2"
+            if jq -e --arg t "$TITLE" '.[] | select(.title==$t)' milestones.json > /dev/null; then
+              id=$(jq -r --arg t "$TITLE" '.[] | select(.title==$t) | .number' milestones.json)
+              gh api repos/$REPO/milestones/$id --method PATCH -F title="$TITLE" -F due_on="${DUE}T00:00:00Z" || true
+            else
+              gh api repos/$REPO/milestones --method POST -F title="$TITLE" -F due_on="${DUE}T00:00:00Z" || true
+            fi
+          }
+          ensure_milestone "MQT: TP1 - Graded Evaluation" "2025-12-15"
+          ensure_milestone "MQT: Modules 1-2 Practice" "2025-11-30"
+          ensure_milestone "MQT: Modules 3-4 Practice" "2025-12-31"
