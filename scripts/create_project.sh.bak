@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPT_DIR/common.sh"
+
+TITLE="${PROJECT_TITLE:-Operations Board}"
+
+echo "==> Ensuring project exists: $TITLE"
+# Try to find existing project id
+PID=$(gh project list --owner "$OWNER" --format json | jq -r '.[] | select(.title=="'"$TITLE"'") | .id' || true)
+if [[ -z "$PID" || "$PID" == "null" ]]; then
+  gh project create --owner "$OWNER" --title "$TITLE" --format json >"$ROOT_DIR/.project.json"
+  PID=$(jq -r '.id' "$ROOT_DIR/.project.json")
+  echo "Created project id: $PID"
+else
+  echo "Found project id: $PID"
+  echo "{\"id\":\"$PID\"}" > "$ROOT_DIR/.project.json"
+fi
+
+# Store node ID for later steps
+echo "$PID" > "$ROOT_DIR/.project_id"
+echo "Project ready ✅"

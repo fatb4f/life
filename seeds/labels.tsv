@@ -1,0 +1,16 @@
+#NAME	#COLOR	DESCRIPTION
+chore	#BFD4F2	Routine maintenance and setup
+feat	#0E8A16	New feature or capability
+fix	#D73A4A	Bug fix or hotfix
+docs	#0075CA	Documentation only changes
+refactor	#A2EEEF	Code restructuring without behavior change
+test	#E4E669	Adding or updating tests
+style	#FBCA04	Formatting, linting, no code changes
+performance	#1D76DB	Performance improvements
+security	#B60205	Security-related
+blocked	#5319E7	Blocked by another task
+high-priority	#E11D21	Do first
+triage	#C2E0C6	Needs review
+question	#D4C5F9	Further information requested
+automation	#5319E7	CI/CD or scripts
+planning	#BFDADC	Project planning & coordination
