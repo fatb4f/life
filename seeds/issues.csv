@@ -1,0 +1,8 @@
+"title","body_path","labels","milestone"
+"Chore: initialize GitHub project automation","seeds/bodies/init-automation.md","chore,automation,planning","M1 – Bootstrap"
+"Chore: create core labels, milestones, and templates","seeds/bodies/core-seeding.md","chore,planning","M1 – Bootstrap"
+"Docs: add CONTRIBUTING and README sections","seeds/bodies/docs-contrib.md","docs","M1 – Bootstrap"
+"Task: set up weekly sprint file (week-1)","seeds/bodies/week1.md","planning","M2 – Week 1"
+"Feature: add project sync command","seeds/bodies/feature-project-sync.md","feat,automation","M3 – Week 2"
+"Refactor: standardize shell paths and Makefile","seeds/bodies/refactor-shell.md","refactor,chore","M3 – Week 2"
+"Docs: write INF2025 onboarding guide","seeds/bodies/docs-onboarding.md","docs,planning","M3 – Week 2"
