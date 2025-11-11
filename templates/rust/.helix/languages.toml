@@ -1,0 +1,7 @@
+[[language]]
+name = "rust"
+auto-format = true
+indent = { tab-width = 2, unit = "  " }
+# rust-analyzer is typically auto-detected; you can override:
+# language-server = { command = "rust-analyzer" }
+formatter = { command = "rustfmt" }

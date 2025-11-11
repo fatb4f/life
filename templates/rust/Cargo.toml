@@ -1,0 +1,7 @@
+[workspace]
+members = ["greeter", "hello"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+authors = ["Your Name <you@example.com>"]

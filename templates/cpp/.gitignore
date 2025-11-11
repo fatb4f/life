@@ -1,0 +1,14 @@
+/build*
+/dist
+/bin
+/.cache
+compile_commands.json
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
