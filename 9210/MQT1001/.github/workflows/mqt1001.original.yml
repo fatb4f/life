@@ -1,0 +1,62 @@
+name: MQT1001 Automation (Docs-only)
+true:
+  workflow_dispatch: null
+  push:
+    branches:
+    - main
+    paths:
+    - MQT1001/**
+    - .github/workflows/mqt1001.yml
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+concurrency:
+  group: mqt1001-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  bootstrap:
+    name: Ensure labels & milestones
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install jq
+      run: 'sudo apt-get update -y
+
+        sudo apt-get install -y jq
+
+        '
+    - name: GH sanity
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: 'gh --version
+
+        gh auth status
+
+        '
+    - name: Ensure labels and milestones
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+      run: "set -euo pipefail\n\ncreate_or_update_label() {\n  local name=\"$1\" color=\"\
+        $2\" desc=\"$3\"\n  if gh label list -R \"$REPO\" --json name | jq -r '.[].name'\
+        \ | grep -qx \"$name\"; then\n    gh label edit \"$name\" -R \"$REPO\" --color\
+        \ \"$color\" --description \"$desc\"\n  else\n    gh label create \"$name\"\
+        \ -R \"$REPO\" --color \"$color\" --description \"$desc\"\n  fi\n}\n\necho\
+        \ \">>> Labels\"\ncreate_or_update_label \"type:module\" \"1D76DB\" \"Module\
+        \ tracking\"\ncreate_or_update_label \"type:exercise\" \"A2EEEF\" \"Practice\
+        \ exercises\"\ncreate_or_update_label \"type:correction\" \"5319E7\" \"Corrections\
+        \ / review\"\ncreate_or_update_label \"prio:high\" \"B60205\" \"High priority\
+        \ items\"\ncreate_or_update_label \"MQT:Review\" \"D4C5F9\" \"Review checkpoint\
+        \ (MQT1001)\"\n\necho \">>> Milestones\"\ngh api repos/$REPO/milestones --method\
+        \ GET --paginate > milestones.json || echo \"[]\" > milestones.json\nensure_milestone()\
+        \ {\n  local TITLE=\"$1\"; local DUE=\"$2\"\n  if jq -e --arg t \"$TITLE\"\
+        \ '.[] | select(.title==$t)' milestones.json > /dev/null; then\n    id=$(jq\
+        \ -r --arg t \"$TITLE\" '.[] | select(.title==$t) | .number' milestones.json)\n\
+        \    gh api repos/$REPO/milestones/$id --method PATCH -F title=\"$TITLE\"\
+        \ -F due_on=\"${DUE}T00:00:00Z\" || true\n  else\n    gh api repos/$REPO/milestones\
+        \ --method POST -F title=\"$TITLE\" -F due_on=\"${DUE}T00:00:00Z\" || true\n\
+        \  fi\n}\nensure_milestone \"MQT: TP1 - Graded Evaluation\" \"2025-12-15\"\
+        \nensure_milestone \"MQT: Modules 1-2 Practice\" \"2025-11-30\"\nensure_milestone\
+        \ \"MQT: Modules 3-4 Practice\" \"2025-12-31\""
