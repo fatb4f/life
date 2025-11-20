@@ -1,0 +1,6 @@
+# Archives
+*.zip
+dist/
+
+# Caches
+__pycache__/

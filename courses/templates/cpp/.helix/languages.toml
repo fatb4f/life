@@ -1,0 +1,10 @@
+[[language]]
+name = "cpp"
+auto-format = true
+indent = { tab-width = 2, unit = "  " }
+language-server = { command = "clangd", args = [
+  "--background-index",
+  "--clang-tidy",
+  "--header-insertion=never"
+] }
+formatter = { command = "clang-format", args = ["-style=file"] }
